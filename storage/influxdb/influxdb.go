@@ -74,6 +74,12 @@ const (
 	serFsLimit string = "fs_limit"
 	// Filesystem usage.
 	serFsUsage string = "fs_usage"
+	// Tcp Establisd count.
+	serEsTabs string = "tcp_estab"
+	// Tcp TimeWait count.
+	serTimeWait string = "tcp_timewait"
+	// Tcp CloseWait count.
+	serCloseWait string = "tcp_closewait"
 )
 
 func new() (storage.StorageDriver, error) {
@@ -207,6 +213,9 @@ func (self *influxdbStorage) containerStatsToPoints(
 	points = append(points, makePoint(serRxErrors, stats.Network.RxErrors))
 	points = append(points, makePoint(serTxBytes, stats.Network.TxBytes))
 	points = append(points, makePoint(serTxErrors, stats.Network.TxErrors))
+	points = append(points, makePoint(serEsTabs, stats.Network.Tcp.Established))
+	points = append(points, makePoint(serTimeWait, stats.Network.Tcp.TimeWait))
+	points = append(points, makePoint(serCloseWait, stats.Network.Tcp.CloseWait))
 
 	self.tagPoints(cInfo, stats, points)
 
